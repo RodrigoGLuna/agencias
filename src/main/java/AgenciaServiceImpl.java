@@ -32,15 +32,17 @@ public class AgenciaServiceImpl implements AgenciaService {
     public Collection<String> getCordenadas(String zipCode) throws AgencyException {
         String apiKey="AIzaSyBK4U6ddWKkrzDtVwwRpZm5Q4J0SYup6cM";
         String google=null;
+        String urlFormada ="https://maps.googleapis.com/maps/api/geocode/json?address=X5006&key=AIzaSyBK4U6ddWKkrzDtVwwRpZm5Q4J0SYup6cM";
         try {
-           google = readUrl("https://maps.googleapis.com/maps/api/geocode/json?address="+zipCode+"&key="+apiKey);
+           google = readUrl(urlFormada);
         } catch (IOException e) {
             throw new AgencyException("Ocurrio un error al conectar con la api de google");
         }
 
-
-        Respuesta respuesta= new Gson().fromJson(google,Respuesta.class);
+        JsonObject objetoJson = new Gson().fromJson(google,JsonObject.class);
+       // ZipCode.Respuesta respuesta= new Gson().fromJson(google,ZipCode.Respuesta.class);
         //Agency[] agencias= gson.fromJson((jsonObject.get("location")), Agency[].class);
+
         return null;
 
     }

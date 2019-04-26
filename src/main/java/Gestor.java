@@ -1,17 +1,6 @@
 import com.google.gson.Gson;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.rmi.activation.ActivationGroup;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-
-import static javafx.scene.input.KeyCode.T;
 import static spark.Spark.*;
 
 public class Gestor {
@@ -33,12 +22,20 @@ public class Gestor {
                 if (site_id == null || payment_method_id == null || latitud == null || longitud == null) {
 
                     return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, "Ni el sitio, ni el metodo de pago, ni latitud ni longitud pueden ser nulo"));
-                } else {
+                }
+                else {
 
                     String urlAgencias = "https://api.mercadolibre.com/sites/" + site_id + "/payment_methods/" + payment_method_id + "/agencies?near_to=" + latitud + "," + longitud;
 
-                    //+","+radius+"&limit="+limite+"&offset="+offset+"";
-
+                    if(radius!=null){
+                        urlAgencias=urlAgencias.concat(","+radius);
+                    }
+                    if(limite!=null){
+                        urlAgencias=urlAgencias.concat("&limit="+limite);
+                    }
+                    if(offset!=null){
+                        urlAgencias=urlAgencias.concat("&offset="+offset);
+                    }
 
                     if (criterio == null) {
                         return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(agenciaService.getAgencias(urlAgencias))));
@@ -86,11 +83,6 @@ public class Gestor {
                     return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, "Ni el sitio, ni el metodo de pago, ni latitud ni longitud pueden ser nulo"));
                 } else {
 
-                    //String urlAgencias = "https://api.mercadolibre.com/sites/" + site_id + "/payment_methods/" + payment_method_id + "/agencies?near_to=" + latitud + "," + longitud;
-
-                    //+","+radius+"&limit="+limite+"&offset="+offset+"";
-
-
                     if (criterio == null) {
                         return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(agenciaService.getCordenadas(zipcode))));
                     } else {
@@ -106,10 +98,7 @@ public class Gestor {
                                 break;
 
                         }
-                       // Collection<Agency> agencies = agenciaService.getCordenadas(zipcode);
-                        //Agency[] agencies1 = (Agency[]) agencies.toArray();
-                        //Operador.ordenarArray(agencies1);
-                        //return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, new Gson().toJsonTree(agencies1)));
+
                         return  null;
                     }
                 }
